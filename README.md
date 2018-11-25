@@ -8,7 +8,7 @@
 
 > 注意：你创建的这个镜像中是包含了自己的配置文件信息的，所以最好是 `private`。
 
-## 具体流程
+## 构建流程
 
 - 在 [Docker Hub](https://hub.docker.com/) （没有就先注册）创建你的 respository （最好 private），如 `ssr`，假设你的 docker hub 用户名为 `zhangsan`。
 - Clone 本项目
@@ -39,12 +39,19 @@
  }
  ```
  
- - 创建 docker 镜像：cd 到本项目的根目录，运行命令 `docker build --no-cache -t zhangsan/ssr:0.1 .`。创建成功之后运行 `docker images` 确认下。
- - 把你本地生成的镜像 push 到你的仓库：
-  - 运行 `docker login`，确认你是登录状态，未登录则登录 `Docker Hub`。
-  - 执行 `docker push zhangsan/ssr:0.1`。
-  - 成功之后到你的 `Docker Hub` 查看该 respository 的 tag 是否有 `0.1` 的版本存在了。
+- 创建 docker 镜像：cd 到本项目的根目录，运行命令 `docker build --no-cache -t zhangsan/ssr:0.1 .`。创建成功之后运行 `docker images` 确认下。
+- 把你本地生成的镜像 push 到你的仓库：
+ - 运行 `docker login`，确认你是登录状态，未登录则登录 `Docker Hub`。
+ - 执行 `docker push zhangsan/ssr:0.1`。
+ - 成功之后到你的 `Docker Hub` 查看该 respository 的 tag 是否有 `0.1` 的版本存在了。
 
+## 使用流程
+
+- 登录你的 vps，安装 docker，执行 `docker login` 登录。
+- 运行 `docker pull zhangsan/ssr:0.1` 命令把刚刚你创建的镜像 pull 下来。
+- 再运行镜像：`docker run -itd --name ssr -p 9000:9000 -p 9001:9001 -p 9002:9002 zhangsan/ssr:0.1`
+- 容器（容器的名字为 `ssr`）启动之后，`ssr server` 会自动跑起来。
+- 根据你 vps 的系统，把 `docker run ssr` 作为开机自启。
 
 
 License
