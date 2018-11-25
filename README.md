@@ -8,6 +8,43 @@
 
 > 注意：你创建的这个镜像中是包含了自己的配置文件信息的，所以最好是 `private`。
 
+## 具体流程
+
+- 在 [Docker Hub](https://hub.docker.com/) （没有就先注册）创建你的 respository （最好 private），如 `ssr`，假设你的 docker hub 用户名为 `zhangsan`。
+- Clone 本项目
+- 在项目根目录创建 `shadowsocks.json`，编写类似如下的 ssr 配置：
+ 
+ ```json
+ {
+    "server":"0.0.0.0",
+    "server_ipv6":"[::]",
+    "local_address":"127.0.0.1",
+    "local_port":1080,
+    "port_password":{
+        "9000":"xxxxxx",
+        "9001":{"password":"xxxxxx", "protocol":"auth_chain_a", "obfs":"tls1.2_ticket_auth", "obfs_param":""},
+        "9002":{"password":"xxxxxx", "protocol":"auth_chain_a", "obfs":"tls1.2_ticket_auth", "obfs_param":""}
+        // ...
+    },
+    "timeout":120,
+    "method":"chacha20",
+    "protocol":"origin",
+    "protocol_param":"",
+    "obfs":"plain",
+    "obfs_param":"",
+    "redirect":"",
+    "dns_ipv6":false,
+    "fast_open":false,
+    "workers":1
+ }
+ ```
+ 
+ - 创建 docker 镜像：cd 到本项目的根目录，运行命令 `docker build --no-cache -t zhangsan/ssr:0.1 .`。创建成功之后运行 `docker images` 确认下。
+ - 把你本地生成的镜像 push 到你的仓库：
+  - 运行 `docker login`，确认你是登录状态，未登录则登录 `Docker Hub`。
+  - 执行 `docker push zhangsan/ssr:0.1`。
+  - 成功之后到你的 `Docker Hub` 查看该 respository 的 tag 是否有 `0.1` 的版本存在了。
+
 
 
 License
